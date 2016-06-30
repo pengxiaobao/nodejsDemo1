@@ -7,12 +7,18 @@ var bodyParser = require('body-parser');
 
 var routes = require('./routes/index');
 var users = require('./routes/users');
+var movie = require('./routes/movie');
 
 var app = express();
 
 // view engine setup
+// app.set('views', path.join(__dirname, 'views'));
+// app.set('view engine', 'ejs');
+// view engine setup
 app.set('views', path.join(__dirname, 'views'));
-app.set('view engine', 'ejs');
+// app.set('view engine', 'ejs');
+app.engine('.html', require('ejs').renderFile);
+app.set('view engine', 'html');
 
 // uncomment after placing your favicon in /public
 //app.use(favicon(path.join(__dirname, 'public', 'favicon.ico')));
@@ -25,10 +31,12 @@ app.use(express.static(path.join(__dirname, 'public')));
 //app.use('/', routes);
 //app.use('/users', users);
 app.use('/', routes.index);
-// app.use('/login', routes.login);
-// app.use('/login', routes.doLogin);
-// app.use('/logout', routes.logout);
-// app.use('/home', routes.home);
+
+app.use('/movie/add',movie.movieAdd);//增加
+app.use('/movie/doadd',movie.doMovieAdd);//提交
+app.use('/movie/query/:name',movie.movieJSON);//getJSON数据
+app.use('/movie/doEditMovie/:name',movie.doEditMovie);//edit
+app.use('/movie/:name',movie.movieAdd);//编辑查询
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {
